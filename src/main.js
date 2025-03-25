@@ -10,9 +10,14 @@ const engine = new BABYLON.Engine(canvas, true)
 // Scene
 const scene = new BABYLON.Scene(engine)
 
-// Camera and Light
-scene.createDefaultCameraOrLight(true, false, true)
-scene.activeCamera.position = new BABYLON.Vector3(0, 0, -4)
+// Light
+scene.createDefaultLight()
+// Camera 
+const camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 2, new BABYLON.Vector3(0, 0, 0), scene)
+
+camera.setPosition(new BABYLON.Vector3(0, 0, -5))
+camera.attachControl(canvas, true)
+
 
 // Mesh
 const plane = new BABYLON.MeshBuilder.CreatePlane("plane", { width:4, height:3}, scene)
