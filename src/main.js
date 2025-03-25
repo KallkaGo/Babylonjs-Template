@@ -12,12 +12,10 @@ const scene = new BABYLON.Scene(engine)
 
 // Camera and Light
 scene.createDefaultCameraOrLight(true, false, true)
-scene.activeCamera.position = new BABYLON.Vector3(0, 0, 4)
+scene.activeCamera.position = new BABYLON.Vector3(0, 0, -4)
 
 // Mesh
 const plane = new BABYLON.MeshBuilder.CreatePlane("plane", { width:4, height:3}, scene)
-
-plane.rotation.y = Math.PI
 
 // Material
 const material = new BABYLON.ShaderMaterial("mat", scene,{
