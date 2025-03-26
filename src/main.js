@@ -1,4 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
+import "@babylonjs/loaders"
 import vertexShader from './shaders/vertex.glsl'
 import fragmentShader from './shaders/fragment.glsl'
 
@@ -18,29 +19,36 @@ const camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 2, new BABYLON.Vector
 camera.setPosition(new BABYLON.Vector3(0, 0, -5))
 camera.attachControl(canvas, true)
 
-
-// Mesh
-const plane = new BABYLON.MeshBuilder.CreatePlane("plane", { width:4, height:3}, scene)
-
 // Material
-const material = new BABYLON.ShaderMaterial("mat", scene,{
+const material = new BABYLON.ShaderMaterial("mat", scene, {
   vertexSource: vertexShader,
   fragmentSource: fragmentShader
-}, 
-{  
-  attributes: ["position","uv"],  
-  uniforms: ['world','view','projection','uDiffuse'],  
-}  
+},
+  {
+    attributes: ["position", "uv", "normal"],
+    uniforms: ['world', 'view', 'projection', 'uDiffuse', 'uNormalMap'],
+  }
 )
 
-material.setTexture("uDiffuse", new BABYLON.Texture("/diffuse.png", scene,{
-  useSRGBBuffer: true
-}))
+
+material.setTexture("uNormalMap", new BABYLON.Texture("/models/DamagedHelmet/glTF/Default_normal.jpg", scene))
 
 
-plane.material = material
 
+// Model
+BABYLON.ImportMeshAsync('/models/DamagedHelmet/glTF/DamagedHelmet.gltf', scene).then((result) => {
+  const group = new BABYLON.TransformNode("group", scene)
+  result.meshes.forEach((mesh) => {
+    if (mesh.name !== '__root__') {
+      mesh.parent = group
+      mesh.material = material
 
+    }
+  })
+
+  group.rotation.y = Math.PI
+
+})
 
 engine.runRenderLoop(() => {
   scene.render()
